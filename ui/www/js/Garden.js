@@ -46,12 +46,9 @@ var garden = {
     if(callingObject.stateChangeListener) {
 
       var state = {
-        doorState: this.doorState,
-        lightOn: this.lightOn,
-        brightness: this.brightness,
-        autoOffTime: this.autoOffTime,
-        autoCloseOn: this.autoCloseOn,
-        autoCloseTime: this.autoCloseTime
+        temp: this.temp,
+        motion: this.motion,
+        moisture: this.moisture
       };
 
       callingObject.stateChangeListener(state)

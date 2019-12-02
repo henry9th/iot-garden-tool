@@ -5,6 +5,10 @@
  * Date:
  */
 
+// SOIL MOISTURE READINGS:
+// Dry: 3650
+// Wet:
+
 #include <Adafruit_SSD1306.h>
 
 int pirPin = D0;
@@ -18,8 +22,11 @@ int motionUpdateTime = 500;
 
 bool motionDetected = false;
 int soilMoisture = 0;
+int temperature = 0;
 
 int servoAngle = 0;
+
+int naturalUpdateTime = 10000;
 
 String topic = "cse222Garden/thisGardenTool";
 
@@ -31,14 +38,15 @@ Timer moistureUpdateTimer(moistureUpdateTime, updateMoisture);
 
 Timer motionTimer(motionUpdateTime, moveServo);
 
-Timer activeMotionTimer(10000, makeSound, 1);
+Timer activeMotionTimer(10000, [](){ activateSound(""); }, 1);
+
+Timer naturalUpdateTimer(naturalUpdateTime, [](){ publishState(""); });
 
 #define OLED_DC     D3
 #define OLED_CS     D4
 #define OLED_RESET  D5
 Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
 int  x, minX;
-
 
 void moveServo() {
   if (servoAngle == 0) {
@@ -54,7 +62,7 @@ void stopSound() {
   digitalWrite(soundPin, LOW);
 }
 
-int makeSound(String arg) {
+int activateSound(String arg) {
   digitalWrite(soundPin, HIGH);
   soundTimer.reset();
 }
@@ -76,7 +84,8 @@ void setup() {
   Particle.variable("motionDetected", motionDetected);
   Particle.variable("soilMoisture", soilMoisture);
 
-  Particle.function("makeSound", makeSound);
+  Particle.function("activateSound", activateSound);
+  Particle.function("publishState", publishState);
 
   moistureUpdateTimer.start();
 
@@ -86,6 +95,8 @@ void setup() {
   display.setTextWrap(false); // turn off text wrapping so we can do scrolling
   x = display.width(); // set scrolling frame to display width
   minX = -1200;
+
+  naturalUpdateTimer.start();
 }
 
 void loop() {
@@ -108,4 +119,28 @@ void loop() {
     motionTimer.stop();
     activeMotionTimer.stop();
   }
+}
+
+
+int publishState(String arg) {
+  String data = "{";
+
+  if(motionDetected) {
+    data += "\"motion\":true";
+  } else {
+    data += "\"motion\":false";
+  }
+  data += ", ";
+  data += "\"moisture\":";
+  data += soilMoisture;
+  data += ", ";
+  data += "\"temp\":";
+  data += temperature;
+  data += "}";
+
+  Serial.println("Publishing:");
+  Serial.println(data);
+
+  Particle.publish(topic, data, 60, PRIVATE);
+  return 0;
 }

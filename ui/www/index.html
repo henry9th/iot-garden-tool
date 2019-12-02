@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Gardening Buddy</title>
+    <meta name="author" content="Joel, Hyunrae">
+    <meta name="description" content="Gardening tool">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./css/main.css" rel="stylesheet">
+    <script src="./resources/particle/particle.min.js"></script>
+</head>
+
+<body>
+    <div class="mainDiv">
+        <div class="innerDiv">
+            <h1>Gardening Buddy</h1>
+
+            <div class="temperature">
+                <span class="subHeader">Temperature</span>
+                <div class="temperatureReadings">
+                    Current Temperature:
+                    <span class="currentTemp">70°</span>
+                </div>
+                <div class="tempSettings">
+                    Notify me when temperature falls below <input type="number" min="-50" max="150" value="70">°<br>
+                </div>
+                <button onclick="hideTemp()">Temp Settings</button>
+            </div>
+
+            <br />
+            <hr>
+            <br />
+
+            <div class="motion">
+                <span class="subHeader">Motion Detection</span>
+                <br />
+                No activity detected
+
+                <div class="motionSettings">
+                    <br />
+                    Frighten wildlife with
+                    <select>
+                        <option value="sound">Sound</option>
+                        <option value="motion">Motion</option>
+                        <option value="light">Light</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input type="checkbox" name="alert" value=""> Alert me if there is ongoing activity in the
+                    garden<br>
+                    <input type="checkbox" name="alert" value=""> Alert me when there is no more activity <br />
+
+                </div>
+            </div>
+            <button onclick="hideMotion()">Motion Settings</button>
+            <br />
+            <br />
+            <hr>
+
+            <br />
+
+            <div class="soil">
+                <span class="subHeader">Soil Moisture</span>
+                <br />
+                Soil Moisture: Good
+                <br />
+                <div class="soilSettings">
+                    <br />
+                    Notify me when soil requires
+                    <br />
+                    <input type="range" min="1" max="100" value="50" class="slider" id="myRange"
+                        onChange="updateTextInput(this.value)">
+                    <div class="sliderDiv">
+                        <div id="currentSoil">50%</div>
+                        <div class="left">1</div>
+                        <div class="right"> 100</div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+            <button onclick="hideSoil()"> Soil Settings</button>
+        </div>
+    </div>
+</body>
+<script src="./js/Garden.js"></script>
+<script src="./js/GardenApp.js"></script>
+
+</html>
