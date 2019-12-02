@@ -35,7 +35,7 @@ function hideSoil() {
         document.getElementsByClassName("soilSettings")[0].style.display = "block";
         soilReading = 0;
     }
-    console.log("clicked?")
+    console.log(garden.moisture)
 }
 function updateTextInput(val) {
     document.getElementById("currentSoil").innerHTML = val + "%";
@@ -43,8 +43,15 @@ function updateTextInput(val) {
 
 function stateUpdate(newState) {
   console.log(newState);
-
   // set values here
+  document.getElementById("currentTemp").innerHTML = Math.ceil(((garden.temp/9.31)-32)/1.8) + "° ";
+  document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: " + garden.moisture;
+  if(garden.motion == true){
+    document.getElementById("wasThereMotion").innerHTML = "Yes"
+  }
+  else{
+    document.getElementById("wasThereMotion").innerHTML = "No"
+  }
 
   //loadingPage(false);
 }
@@ -52,7 +59,6 @@ function stateUpdate(newState) {
 // Have "Loading" appear to transition
 function loadingPage(value) {
   document.getElementById("loading").hidden = !value;
-
   document.getElementById("allComponents").hidden = value;
 }
 

@@ -16,12 +16,11 @@
     <div class="mainDiv">
         <div class="innerDiv">
             <h1>Gardening Buddy</h1>
-
             <div class="temperature">
                 <span class="subHeader">Temperature</span>
                 <div class="temperatureReadings">
                     Current Temperature:
-                    <span class="currentTemp">70°</span>
+                    <span id="currentTemp"></span>
                 </div>
                 <div class="tempSettings">
                     Notify me when temperature falls below <input type="number" min="-50" max="150" value="70">°<br>
@@ -36,7 +35,7 @@
             <div class="motion">
                 <span class="subHeader">Motion Detection</span>
                 <br />
-                No activity detected
+                <span id="wasThereMotion">No</span>
 
                 <div class="motionSettings">
                     <br />
@@ -64,8 +63,8 @@
             <div class="soil">
                 <span class="subHeader">Soil Moisture</span>
                 <br />
-                Soil Moisture: Good
                 <br />
+                <span id="soilLevel">Current Soil Moisture Level: </span>
                 <div class="soilSettings">
                     <br />
                     Notify me when soil requires
