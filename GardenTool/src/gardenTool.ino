@@ -7,26 +7,27 @@
 
 // SOIL MOISTURE READINGS:
 // Dry: 3650
-// Wet:
+// Wet: 1870
 
 #include <Adafruit_SSD1306.h>
 
 int pirPin = D0;
 int soundPin = D1;
 int moisturePin = A0;
-int lightPin = D3;
+int lightPin = A1;
+int tempPin = D6;
 
 int soundTime = 1000;
 int moistureUpdateTime = 5000;
 int motionUpdateTime = 500;
 
-bool motionDetected = false;
+int motionDetected = false;
 int soilMoisture = 0;
 int temperature = 0;
 
 int servoAngle = 0;
 
-int naturalUpdateTime = 10000;
+int naturalUpdateTime = 5000;
 
 String topic = "cse222Garden/thisGardenTool";
 
@@ -41,6 +42,12 @@ Timer motionTimer(motionUpdateTime, moveServo);
 Timer activeMotionTimer(10000, [](){ activateSound(""); }, 1);
 
 Timer naturalUpdateTimer(naturalUpdateTime, [](){ publishState(""); });
+
+int strobeIntervalTime = 100;
+int strobeTotalTime = 5000;
+
+Timer strobeTimer(strobeIntervalTime, flipLight);
+Timer strobeTotalTimer(strobeTotalTime, stopStrobe);
 
 #define OLED_DC     D3
 #define OLED_CS     D4
@@ -67,6 +74,24 @@ int activateSound(String arg) {
   soundTimer.reset();
 }
 
+int activateLight(String arg) {
+  strobeTimer.start();
+  strobeTotalTimer.start();
+}
+
+void flipLight() {
+  if (digitalRead(lightPin) == HIGH) {
+    digitalWrite(lightPin, LOW);
+  } else {
+    digitalWrite(lightPin, HIGH);
+  }
+}
+
+void stopStrobe() {
+  strobeTimer.stop();
+  digitalWrite(lightPin, LOW);
+}
+
 void updateMoisture() {
   soilMoisture = analogRead(moisturePin);
 }
@@ -78,6 +103,7 @@ void setup() {
   pinMode(soundPin, OUTPUT);
   pinMode(moisturePin, INPUT);
   pinMode(lightPin, OUTPUT);
+  //pinMode(tempPin, INPUT);
 
   servo.attach(D2);
 
@@ -85,6 +111,7 @@ void setup() {
   Particle.variable("soilMoisture", soilMoisture);
 
   Particle.function("activateSound", activateSound);
+  Particle.function("activateLight", activateLight);
   Particle.function("publishState", publishState);
 
   moistureUpdateTimer.start();
@@ -97,10 +124,11 @@ void setup() {
   minX = -1200;
 
   naturalUpdateTimer.start();
+
+  temperature = analogRead(tempPin);
 }
 
 void loop() {
-
   display.clearDisplay();
   display.setCursor(x/2, 7);
   display.print("SM: ");
@@ -111,21 +139,25 @@ void loop() {
   if (digitalRead(pirPin) == 0) {
     if (motionDetected == false) {
       motionTimer.reset();
-      activeMotionTimer.reset();
+      //activeMotionTimer.reset();
+      motionDetected = true;
     }
-    motionDetected = true;
   } else {
     motionDetected = false;
     motionTimer.stop();
     activeMotionTimer.stop();
   }
+
 }
 
 
 int publishState(String arg) {
+
+  temperature = analogRead(tempPin);
+
   String data = "{";
 
-  if(motionDetected) {
+  if(motionDetected == 0) {
     data += "\"motion\":true";
   } else {
     data += "\"motion\":false";
