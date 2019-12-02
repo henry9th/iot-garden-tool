@@ -52,7 +52,7 @@ button {
     font-weight: bold;
 }
 .tempSettings {
-display: none;
+  display: none;
 }
 .mainDiv{
     margin: 0 auto;

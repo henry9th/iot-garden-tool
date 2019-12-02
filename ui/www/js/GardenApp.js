@@ -11,7 +11,7 @@ function hideTemp() {
         document.getElementsByClassName("tempSettings")[0].style.display = "block";
         tempReading = 0;
     }
-    console.log("clicked?")
+
 }
 
 function hideMotion() {
@@ -23,7 +23,7 @@ function hideMotion() {
         document.getElementsByClassName("motionSettings")[0].style.display = "block";
         motionReading = 0;
     }
-    console.log("clicked?")
+
 
 }
 function hideSoil() {
@@ -35,7 +35,6 @@ function hideSoil() {
         document.getElementsByClassName("soilSettings")[0].style.display = "block";
         soilReading = 0;
     }
-    console.log(garden.moisture)
 }
 function updateTextInput(val) {
     document.getElementById("currentSoil").innerHTML = val + "%";
@@ -44,14 +43,30 @@ function updateTextInput(val) {
 function stateUpdate(newState) {
   console.log(newState);
   // set values here
-  document.getElementById("currentTemp").innerHTML = Math.ceil(((garden.temp/9.31)-32)/1.8) + "° ";
-  document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: " + garden.moisture;
+  var tempAfterMath = Math.ceil(((garden.temp/9.31)-32)/1.8);
+  document.getElementById("currentTemp").innerHTML = tempAfterMath + "° ";
+  if(garden.moisture > 1870 && garden.moisture < 2300){
+    document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: Good";
+  }
+  else if(garden.moisture >2300 && garden.moisture < 2850){
+    document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: Needs Watering";
+  }
+  else if (garden.moisture > 2850){
+    document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: Urgently needs water";
+  }
+
   if(garden.motion == true){
-    document.getElementById("wasThereMotion").innerHTML = "Yes"
+    document.getElementById("wasThereMotion").innerHTML = "Motion detected"
   }
-  else{
-    document.getElementById("wasThereMotion").innerHTML = "No"
+  else if(garden.motion == false){
+    document.getElementById("wasThereMotion").innerHTML = "No motion detected"
   }
+
+
+  if(tempAfterMath<document.getElementById("tempNotification").value){
+      console.log("Temperature Alert: Your readings are " + (document.getElementById("tempNotification").value-tempAfterMath) + "° too low." );
+  }
+
 
   //loadingPage(false);
 }

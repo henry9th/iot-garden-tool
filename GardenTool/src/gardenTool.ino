@@ -26,7 +26,7 @@ int temperature = 0;
 
 int servoAngle = 0;
 
-int naturalUpdateTime = 3000;
+int naturalUpdateTime = 5000;
 
 String topic = "cse222Garden/thisGardenTool";
 

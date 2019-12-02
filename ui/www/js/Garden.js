@@ -10,7 +10,7 @@ function newGardenEvent(objectContainingData) {
 
       if (data) {
         garden.temp = parseInt(data.temp);
-        garden.motion = (data.motion == "true");
+        garden.motion = data.motion;
         garden.moisture = parseInt(data.moisture);
       }
       garden.stateChange()
