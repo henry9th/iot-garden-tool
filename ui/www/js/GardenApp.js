@@ -1,41 +1,21 @@
-var tempReading = 1;
-var motionReading = 1;
-var soilReading = 1;
-
-function hideTemp() {
-    if (tempReading == 0) {
-        document.getElementsByClassName("tempSettings")[0].style.display = "none";
-        tempReading = 1;
-    }
-    else if (tempReading == 1) {
-        document.getElementsByClassName("tempSettings")[0].style.display = "block";
-        tempReading = 0;
-    }
-
+var settingsVisible = 0;
+function hideSettings(){
+  if(settingsVisible == 0){
+    document.getElementById("settings").style.display = "block";
+    document.getElementById("hideButton").style.display= "none";
+    document.getElementById("backButton").style.display = "inline-block";
+    document.getElementById("dataReadingContent").style.display = "none";
+    settingsVisible = 1;
+  }
+  else if(settingsVisible == 1){
+    document.getElementById("settings").style.display = "none";
+    document.getElementById("hideButton").style.display= "inline-block";
+    document.getElementById("backButton").style.display = "none";
+    document.getElementById("dataReadingContent").style.display = "block";
+    settingsVisible = 0;
+  }
 }
 
-function hideMotion() {
-    if (motionReading == 0) {
-        document.getElementsByClassName("motionSettings")[0].style.display = "none";
-        motionReading = 1;
-    }
-    else if (motionReading == 1) {
-        document.getElementsByClassName("motionSettings")[0].style.display = "block";
-        motionReading = 0;
-    }
-
-
-}
-function hideSoil() {
-    if (soilReading == 0) {
-        document.getElementsByClassName("soilSettings")[0].style.display = "none";
-        soilReading = 1;
-    }
-    else if (soilReading == 1) {
-        document.getElementsByClassName("soilSettings")[0].style.display = "block";
-        soilReading = 0;
-    }
-}
 function updateTextInput(val) {
     document.getElementById("currentSoil").innerHTML = val + "%";
 }
@@ -43,30 +23,43 @@ function updateTextInput(val) {
 function stateUpdate(newState) {
   console.log(newState);
   // set values here
-  var tempAfterMath = Math.ceil(((garden.temp/9.31)-32)/1.8);
-  document.getElementById("currentTemp").innerHTML = tempAfterMath + "° ";
-  if(garden.moisture > 1870 && garden.moisture < 2300){
-    document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: Good";
+  // Temperature HTML/CSS here
+  document.getElementById("currentTemp").innerHTML = garden.temp + "°F";
+  if(garden.temp >= 70 && garden.temp <= 90){
+    document.getElementById("currentTemp").style.color = "green";
   }
-  else if(garden.moisture >2300 && garden.moisture < 2850){
-    document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: Needs Watering";
+  else if(garden.temp < 70){
+    document.getElementById("currentTemp").style.color = "blue";
   }
-  else if (garden.moisture > 2850){
-    document.getElementById("soilLevel").innerHTML = "Current Soil Moisture Level: Urgently needs water";
+  else if(garden.temp > 90){
+    document.getElementById("currentTemp").style.color= "red";
+  }
+  if(garden.temp<document.getElementById("tempNotification").value){
+      console.log("Temperature Alert: Your readings are " + (document.getElementById("tempNotification").value-garden.temp) + "° too low." );
   }
 
+  // Soil moisture HTML/CSS
+  if(garden.moisture < 2300){
+    document.getElementById("soilLevel").innerHTML = "Too much water";
+    document.getElementById("soilLevel").style.color="blue";
+  }
+  else if(garden.moisture >2300 && garden.moisture < 2850){
+    document.getElementById("soilLevel").innerHTML = "Water level is good";
+    document.getElementById("soilLevel").style.color="green";
+  }
+  else if (garden.moisture > 2850){
+    document.getElementById("soilLevel").innerHTML = "Urgently needs water";
+    document.getElementById("soilLevel").style.color="red";
+  }
+// Motion HTML/CSS
   if(garden.motion == true){
     document.getElementById("wasThereMotion").innerHTML = "Motion detected"
+    document.getElementById("wasThereMotion").style.color="red";
   }
   else if(garden.motion == false){
     document.getElementById("wasThereMotion").innerHTML = "No motion detected"
+    document.getElementById("wasThereMotion").style.color="green";
   }
-
-
-  if(tempAfterMath<document.getElementById("tempNotification").value){
-      console.log("Temperature Alert: Your readings are " + (document.getElementById("tempNotification").value-tempAfterMath) + "° too low." );
-  }
-
 
   //loadingPage(false);
 }
@@ -88,3 +81,34 @@ document.addEventListener("DOMContentLoaded", function(event) {
   garden.setup()
   garden.setStateChangeListener(stateUpdate)
 })
+
+function testFrightening(){
+  var e = document.getElementById("frightenValue");
+  var strUser = e.options[e.selectedIndex].value;
+
+  if(strUser == "sound"){
+    garden.activateSound();
+  }
+  else if(strUser == "motion"){
+    garden.activateMotion();
+  }
+  else if(strUser == "light"){
+    garden.activateLight();
+  }
+  else{
+    console.log(strUser)
+  }
+}
+
+function firstFrightSetting(){
+  var e = document.getElementById("firstFright");
+  var strUser = e.options[e.selectedIndex].value;
+  garden.setFirstScare(strUser);
+
+}
+function secondFrightSetting(){
+  var e = document.getElementById("firstFright");
+  var strUser = e.options[e.selectedIndex].value;
+  garden.setSecondScare(strUser);
+
+}

@@ -15,74 +15,82 @@
 <body>
     <div class="mainDiv">
         <div class="innerDiv">
-            <h1>Gardening Buddy</h1>
-            <div class="temperature">
-              <div class="tempDiv1">
-                <span class="subHeader">Temperature</span>
-                <div class="temperatureReadings">
-                    Current Temperature:
-                    <span id="currentTemp"></span>
+          <div class="titleDiv">
+              <h1 class="title">Gardening Buddy</h1>
+              <button id="backButton" onclick="hideSettings()">&larr;</button>
+              <button id="hideButton" onclick="hideSettings()">&#9881;</button>
+            </div>
+            <div id="settings">
+              <div class="tempSettings">
+                  Notify me when temperature falls below <input id = "tempNotification"type="number" min="-50" max="150" value="70">°<br>
+              </div>
+              <div class="motionSettings">
+                  <br />
+                  Frighten wildlife initially wtih:
+                  <br/>
+                  <select id="firstFright">
+                      <option value="sound">Sound</option>
+                      <option value="motion">Motion</option>
+                      <option value="light">Light</option>
+                  </select>
+                  <button onClick="firstFrightSetting()"class="set">Set</button>
+                  <br />
+                  <br />
+                  If wildlife is still there, frighten with:
+                  <br/>
+                  <select id="secondFright">
+                      <option value="light">Light</option>
+                      <option value="sound">Sound</option>
+                      <option value="motion">Motion</option>
+                  </select>
+                  <button onClick="secondFrightSetting()" class="set">Set</button>
+                  <br />
+                  <br />
+                  <input type="checkbox" name="alert" value=""> Alert me if there is ongoing activity in the
+                  garden<br>
+                  <input type="checkbox" name="alert" value=""> Alert me when there is no more activity <br />
+              </div>
+            </div>
+            <div id ="dataReadingContent">
+              <div class="temperature">
+                <div class="tempDiv1">
+                  <span class="subHeader">Temperature</span>
+                  <div class="temperatureReadings">
+                      <!-- Current Temperature: -->
+                      <span id="currentTemp"></span>
+                  </div>
+                </div>
+                <div class="tempDiv2">
+
                 </div>
               </div>
-              <div class="tempDiv2">
-                <div class="tempSettings">
-                    Notify me when temperature falls below <input id = "tempNotification"type="number" min="-50" max="150" value="70">°<br>
-                </div>
-                <button onclick="hideTemp()">Temp Settings</button>
+
+              <br />
+              <hr>
+              <br />
+
+              <div class="motion">
+                  <span class="subHeader">Motion Detection</span>
+                  <br />
+                  <span id="wasThereMotion"></span>
+                  <br />
+                  <br />
+                  Frighten wildlife with
+                  <select id ="frightenValue">
+                      <option value="sound">Sound</option>
+                      <option value="motion">Motion</option>
+                      <option value="light">Light</option>
+                  </select>
+                  <button onClick="testFrightening()"id="testButton">Test</button>
+              </div>
+              <hr>
+              <br />
+              <div class="soil">
+                  <span class="subHeader">Soil Moisture</span>
+                  <br />
+                  <span id="soilLevel"></span>
               </div>
             </div>
-
-            <br />
-            <hr>
-            <br />
-
-            <div class="motion">
-                <span class="subHeader">Motion Detection</span>
-                <br />
-                <span id="wasThereMotion">No</span>
-
-                <div class="motionSettings">
-                    <br />
-                    Frighten wildlife with
-                    <select>
-                        <option value="sound">Sound</option>
-                        <option value="motion">Motion</option>
-                        <option value="light">Light</option>
-                    </select>
-                    <br />
-                    <br />
-                    <input type="checkbox" name="alert" value=""> Alert me if there is ongoing activity in the
-                    garden<br>
-                    <input type="checkbox" name="alert" value=""> Alert me when there is no more activity <br />
-
-                </div>
-            </div>
-            <button onclick="hideMotion()">Motion Settings</button>
-            <br />
-            <br />
-            <hr>
-
-            <br />
-
-            <div class="soil">
-                <span class="subHeader">Soil Moisture</span>
-                <br />
-                <span id="soilLevel">Current Soil Moisture Level: </span>
-                <div class="soilSettings">
-                    <br />
-                    Notify me when soil requires
-                    <br />
-                    <input type="range" min="1" max="100" value="50" class="slider" id="myRange"
-                        onChange="updateTextInput(this.value)">
-                    <div class="sliderDiv">
-                        <div id="currentSoil">50%</div>
-                        <div class="left">1</div>
-                        <div class="right"> 100</div>
-                    </div>
-                    <br />
-                </div>
-            </div>
-            <button onclick="hideSoil()"> Soil Settings</button>
         </div>
     </div>
 </body>
