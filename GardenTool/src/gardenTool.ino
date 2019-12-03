@@ -15,39 +15,36 @@ int pirPin = D0;
 int soundPin = D1;
 int moisturePin = A0;
 int lightPin = A1;
-int tempPin = D6;
+int tempPin = A2;
 
-int soundTime = 1000;
-int moistureUpdateTime = 5000;
-int motionUpdateTime = 500;
-
+// Measurement values
 int motionDetected = false;
 int soilMoisture = 0;
 int temperature = 0;
 
-int servoAngle = 0;
-
+// Timer for taking measurements and sending data to the cloud
 int naturalUpdateTime = 5000;
-
-String topic = "cse222Garden/thisGardenTool";
-
-Servo servo;
-
-Timer soundTimer(soundTime, stopSound);
-
-Timer moistureUpdateTimer(moistureUpdateTime, updateMoisture);
-
-Timer motionTimer(motionUpdateTime, moveServo);
-
-Timer activeMotionTimer(10000, [](){ activateSound(""); }, 1);
-
 Timer naturalUpdateTimer(naturalUpdateTime, [](){ publishState(""); });
 
+// Sound alerts
+int soundTime = 1000;
+Timer soundTimer(soundTime, stopSound, 1);
+
+// Motor flipping
+Servo servo;
+int servoAngle = 0;
+int motionUpdateTime = 800;
+int motionTotalTime = 5000;
+Timer motionTimer(motionUpdateTime, moveServo);
+Timer stopMotionTimer(motionTotalTime, stopMotion, 1);
+
+// Light strobing
 int strobeIntervalTime = 100;
 int strobeTotalTime = 5000;
-
 Timer strobeTimer(strobeIntervalTime, flipLight);
-Timer strobeTotalTimer(strobeTotalTime, stopStrobe);
+Timer strobeTotalTimer(strobeTotalTime, stopStrobe, 1);
+
+Timer defaultTimer(10000, [](){ activateSound(""); }, 1);
 
 #define OLED_DC     D3
 #define OLED_CS     D4
@@ -56,6 +53,8 @@ Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
 int  x, minX;
 
 void moveServo() {
+  servo.attach(D2);
+
   if (servoAngle == 0) {
     servoAngle = 180;
     servo.write(180);
@@ -63,6 +62,11 @@ void moveServo() {
     servoAngle = 0;
     servo.write(0);
   }
+}
+
+void stopMotion() {
+  motionTimer.stop();
+  servo.detach();
 }
 
 void stopSound() {
@@ -79,6 +83,12 @@ int activateLight(String arg) {
   strobeTotalTimer.start();
 }
 
+int activateMotion(String arg) {
+  motionTimer.start();
+  stopMotionTimer.start();
+}
+
+
 void flipLight() {
   if (digitalRead(lightPin) == HIGH) {
     digitalWrite(lightPin, LOW);
@@ -92,9 +102,6 @@ void stopStrobe() {
   digitalWrite(lightPin, LOW);
 }
 
-void updateMoisture() {
-  soilMoisture = analogRead(moisturePin);
-}
 
 // setup() runs once, when the device is first turned on.
 void setup() {
@@ -103,7 +110,7 @@ void setup() {
   pinMode(soundPin, OUTPUT);
   pinMode(moisturePin, INPUT);
   pinMode(lightPin, OUTPUT);
-  //pinMode(tempPin, INPUT);
+  pinMode(tempPin, INPUT);
 
   servo.attach(D2);
 
@@ -112,9 +119,8 @@ void setup() {
 
   Particle.function("activateSound", activateSound);
   Particle.function("activateLight", activateLight);
+  Particle.function("activateMotion", activateMotion);
   Particle.function("publishState", publishState);
-
-  moistureUpdateTimer.start();
 
   display.begin(SSD1306_SWITCHCAPVCC);
   display.setTextSize(7);
@@ -138,22 +144,29 @@ void loop() {
 
   if (digitalRead(pirPin) == 0) {
     if (motionDetected == false) {
-      motionTimer.reset();
-      //activeMotionTimer.reset();
+
+
       motionDetected = true;
     }
   } else {
+
     motionDetected = false;
-    motionTimer.stop();
-    activeMotionTimer.stop();
+
   }
 
 }
 
+String topic = "cse222Garden/thisGardenTool";
 
 int publishState(String arg) {
 
-  temperature = analogRead(tempPin);
+  soilMoisture = analogRead(moisturePin);
+
+  int reading = analogRead(tempPin);
+  double voltage = (reading * 3.3) / 4095.0;
+
+  temperature = (voltage - 0.5) * 100;
+  double temperatureF = ((temperature * 9.0) / 5.0) + 32.0;
 
   String data = "{";
 
@@ -167,7 +180,7 @@ int publishState(String arg) {
   data += soilMoisture;
   data += ", ";
   data += "\"temp\":";
-  data += temperature;
+  data += String(temperatureF);
   data += "}";
 
   Serial.println("Publishing:");
