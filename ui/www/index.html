@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Gardening Buddy</title>
+    <title>SmartCrow™</title>
     <meta name="author" content="Joel, Hyunrae">
     <meta name="description" content="Gardening tool">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,17 +16,20 @@
     <div class="mainDiv">
         <div class="innerDiv">
           <div class="titleDiv">
-              <h1 class="title">Gardening Buddy</h1>
+              <h1 class="title">SmartCrow™</h1>
               <button id="backButton" onclick="hideSettings()">&larr;</button>
               <button id="hideButton" onclick="hideSettings()">&#9881;</button>
             </div>
             <div id="settings">
-              <div class="tempSettings">
-                  Notify me when temperature falls below <input id = "tempNotification"type="number" min="-50" max="150" value="70">°<br>
+              <div class="tempSetthrings">
+                  <div class="settingsWords">Notify me when temperature falls below </div><input id = "tempNotification"type="number" min="-50" max="150" value="70">°<br>
               </div>
+              <hr>
               <div class="motionSettings">
                   <br />
-                  Frighten wildlife initially wtih:
+                  <div class="settingsWords">
+                    Frighten wildlife initially wtih:
+                  </div>
                   <br/>
                   <select id="firstFright">
                       <option value="sound">Sound</option>
@@ -36,7 +39,9 @@
                   <button onClick="firstFrightSetting()"class="set">Set</button>
                   <br />
                   <br />
-                  If wildlife is still there, frighten with:
+                  <div class="settingsWords">
+                    If wildlife is still there, frighten with:
+                  </div>
                   <br/>
                   <select id="secondFright">
                       <option value="light">Light</option>
@@ -45,10 +50,18 @@
                   </select>
                   <button onClick="secondFrightSetting()" class="set">Set</button>
                   <br />
+                  <hr>
                   <br />
-                  <input type="checkbox" name="alert" value=""> Alert me if there is ongoing activity in the
-                  garden<br>
-                  <input type="checkbox" name="alert" value=""> Alert me when there is no more activity <br />
+                  <div class="inputMobile">
+                    <input class="inputType" type="checkbox" name="alert" value="">
+                    <div class="settingsWords">Alert me if there is ongoing activity in the garden </div>
+                  </div>
+                    <br>
+                  <div class="inputMobile">
+                    <input class="inputType" type="checkbox" name="alert" value="">
+                    <div class="settingsWords">Alert me when there is no more activity </div>
+                  </div>
+                  <br />
               </div>
             </div>
             <div id ="dataReadingContent">

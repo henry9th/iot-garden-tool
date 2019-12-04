@@ -5,8 +5,12 @@ var topic =                 "cse222Garden/thisGarden"
 function newGardenEvent(objectContainingData) {
 
       console.dir(objectContainingData);
+      try {
+        var data = JSON.parse(objectContainingData.data);
 
-      var data = JSON.parse(objectContainingData.data);
+      } catch (e) {
+        console.log(e);
+      }
 
       if (data) {
         garden.temp = parseInt(data.temp);
@@ -90,7 +94,6 @@ var garden = {
 
   stateChange: function() {
     var callingObject = this
-
     if(callingObject.stateChangeListener) {
 
       var state = {

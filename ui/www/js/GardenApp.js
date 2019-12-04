@@ -28,13 +28,13 @@ function stateUpdate(newState) {
   // set values here
   // Temperature HTML/CSS here
   document.getElementById("currentTemp").innerHTML = garden.temp + "°F";
-  if(garden.temp >= 70 && garden.temp <= 90){
+  if(garden.temp >= 70 && garden.temp <= 88){
     document.getElementById("currentTemp").style.color = "green";
   }
   else if(garden.temp < 70){
     document.getElementById("currentTemp").style.color = "blue";
   }
-  else if(garden.temp > 90){
+  else if(garden.temp > 88){
     document.getElementById("currentTemp").style.color= "red";
   }
   if(garden.temp<document.getElementById("tempNotification").value){

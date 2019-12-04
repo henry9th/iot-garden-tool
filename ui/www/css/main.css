@@ -50,7 +50,6 @@ body{
 }
 
 #currentTemp{
-    /*color: red;*/
     font-size: 25px;
 }
 #soilLevel{
@@ -85,4 +84,49 @@ body{
 #currentSoil{
     display: inline-block;
     margin-left: 43%;
+}
+.inputType{
+  display:inline-block;
+}
+.settingsWords{
+  display:inline-block;
+}
+
+
+@media only screen and (max-width: 600px) {
+  h1{
+    /*font-size: 20px;*/
+  }
+  .mainDiv{
+    width: 80%;
+    border-style: none;
+  }
+  #currentTemp{
+      font-size: 40px;
+  }
+  #wasThereMotion{
+    font-size: 30px;
+  }
+  #testButton{
+    font-size: 22px;
+  }
+  .subHeader{
+    font-size: 24px;
+  }
+  #soilLevel{
+    font-size: 22px;
+  }
+  #hideButton{
+    font-size: 40px;
+  }
+  #backButton{
+    font-size: 40px;
+  }
+  .settingsWords{
+    font-size: 23px;
+  }
+  .inputMobile{
+    display:flex;
+    justify-content: space-between;
+  }
 }
