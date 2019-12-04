@@ -18,7 +18,6 @@ body{
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  /*padding: 5px 5px;*/
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -70,11 +69,6 @@ body{
     border: 3px solid green;
     padding: 10px;
 }
-/*.innerDiv{
-    display: inline-block;
-    margin: 0 auto;
-    padding: 3px;
-}*/
 #settings{
   display: none;
 }

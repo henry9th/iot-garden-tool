@@ -1,4 +1,6 @@
 var settingsVisible = 0;
+
+// Function to hide and show the settings div
 function hideSettings(){
   if(settingsVisible == 0){
     document.getElementById("settings").style.display = "block";
@@ -20,6 +22,7 @@ function updateTextInput(val) {
     document.getElementById("currentSoil").innerHTML = val + "%";
 }
 
+// Each time the state is updated, this displays the current values for Temp/Motion/Soil
 function stateUpdate(newState) {
   console.log(newState);
   // set values here
@@ -61,7 +64,6 @@ function stateUpdate(newState) {
     document.getElementById("wasThereMotion").style.color="green";
   }
 
-  //loadingPage(false);
 }
 
 // Have "Loading" appear to transition
@@ -72,16 +74,11 @@ function loadingPage(value) {
 
 // Initializing different pages and buttons used throughout the application
 document.addEventListener("DOMContentLoaded", function(event) {
-
-  // define functions
-
-  // add event listeners
-
-  //loadingPage(true)
   garden.setup()
   garden.setStateChangeListener(stateUpdate)
 })
 
+// For testing the frightening methods when clicking "Test"
 function testFrightening(){
   var e = document.getElementById("frightenValue");
   var strUser = e.options[e.selectedIndex].value;
@@ -100,12 +97,14 @@ function testFrightening(){
   }
 }
 
+// Checks first frighten value
 function firstFrightSetting(){
   var e = document.getElementById("firstFright");
   var strUser = e.options[e.selectedIndex].value;
   garden.setFirstScare(strUser);
 
 }
+// Checks second frighten value
 function secondFrightSetting(){
   var e = document.getElementById("firstFright");
   var strUser = e.options[e.selectedIndex].value;
