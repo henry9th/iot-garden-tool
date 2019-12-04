@@ -2,6 +2,7 @@ var myParticleAccessToken = "8af5e881c4b3f6ab1f5cc9d4fdd1be463cb6a26b"
 var myDeviceId =            "37002a000647363332363639"
 var topic =                 "cse222Garden/thisGarden"
 
+// Whenever event streams are published, parses the data to use on the UI side.
 function newGardenEvent(objectContainingData) {
 
       console.dir(objectContainingData);
@@ -19,7 +20,7 @@ function newGardenEvent(objectContainingData) {
       }
       garden.stateChange()
 }
-
+// Setting functions to activate the motion, sound, and light sensors. Also functions for setting the intial scare type and secondary scare type.
 var garden = {
   temp: 0,
   motion: false,
@@ -91,7 +92,7 @@ var garden = {
     this.stateChangeListener = aListener;
     //this.stateChange();
   },
-
+// Updates the state changes.
   stateChange: function() {
     var callingObject = this
     if(callingObject.stateChangeListener) {

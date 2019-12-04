@@ -12,7 +12,7 @@ The following hardware needs to be wired to a Particle Photon.
 You would need to configure the pin values in the .ino file to match your specific wiring. The project also uses Particle cloud to send values to the user interface and receive instructions from the user. Ensure that the device id and the Particle access token is configured correctly in Garden.js within the `ui` folder.
 
 ### Sequence Diagram
-Setting the motion detector to firstly use Sound to frighten wildlife, then use light to frighten the wild life.-
+Setting the motion detector to firstly use Sound to frighten wildlife, then use light to frighten the wild life.
 
 title Gardening Tool
 UI->Particle: Set initial fright to Sound, secondary fright to light
