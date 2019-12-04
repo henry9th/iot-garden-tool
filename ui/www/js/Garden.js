@@ -5,8 +5,12 @@ var topic =                 "cse222Garden/thisGarden"
 function newGardenEvent(objectContainingData) {
 
       console.dir(objectContainingData);
+      try {
+        var data = JSON.parse(objectContainingData.data);
 
-      var data = JSON.parse(objectContainingData.data);
+      } catch (e) {
+        console.log(e);
+      }
 
       if (data) {
         garden.temp = parseInt(data.temp);
@@ -22,11 +26,59 @@ var garden = {
   moisture: 0,
   stateChangeListener: null,
 
-  activateMotion: function(autoOffTime) {
+  activateMotion: function() {
     var functionData = {
       deviceId:myDeviceId,
       name: "activateMotion",
       argument: "true",
+      auth: myParticleAccessToken
+    }
+    function onSuccess(e) { console.log("activateMotion call success") }
+    function onFailure(e) { console.log("activateMotion call failed")
+                       console.dir(e) }
+    particle.callFunction(functionData).then(onSuccess,onFailure)
+  },
+  activateSound: function() {
+    var functionData = {
+      deviceId:myDeviceId,
+      name: "activateSound",
+      argument: "true",
+      auth: myParticleAccessToken
+    }
+    function onSuccess(e) { console.log("activateMotion call success") }
+    function onFailure(e) { console.log("activateMotion call failed")
+                       console.dir(e) }
+    particle.callFunction(functionData).then(onSuccess,onFailure)
+  },
+  activateLight: function() {
+    var functionData = {
+      deviceId:myDeviceId,
+      name: "activateLight",
+      argument: "true",
+      auth: myParticleAccessToken
+    }
+    function onSuccess(e) { console.log("activateMotion call success") }
+    function onFailure(e) { console.log("activateMotion call failed")
+                       console.dir(e) }
+    particle.callFunction(functionData).then(onSuccess,onFailure)
+  },
+  setFirstScare: function(firstScare) {
+    var functionData = {
+      deviceId:myDeviceId,
+      name: "setFirstScare",
+      argument: firstScare,
+      auth: myParticleAccessToken
+    }
+    function onSuccess(e) { console.log("activateMotion call success") }
+    function onFailure(e) { console.log("activateMotion call failed")
+                       console.dir(e) }
+    particle.callFunction(functionData).then(onSuccess,onFailure)
+  },
+  setSecondScare: function(secondScare) {
+    var functionData = {
+      deviceId:myDeviceId,
+      name: "setFirstScare",
+      argument:  secondScare,
       auth: myParticleAccessToken
     }
     function onSuccess(e) { console.log("activateMotion call success") }
@@ -42,7 +94,6 @@ var garden = {
 
   stateChange: function() {
     var callingObject = this
-
     if(callingObject.stateChangeListener) {
 
       var state = {
